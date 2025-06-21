@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StageRank</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <img src="/assets/logo.svg" alt="StageRank Logo" class="logo" />
+  
+  <div class="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+  <nav>
+    <a href="index.html" class="nav">Stage</a>
+    <a href="artists.html" class="nav">Artists</a>
+    <a href="concerts.html" class="nav">Concerts</a>
+    <a href="songs.html" class="nav">Songs</a>
+  </nav>
+
+  <div class="mobile-nav">
+    <a href="index.html" class="nav">Stage</a>
+    <a href="artists.html" class="nav">Artists</a>
+    <a href="concerts.html" class="nav">Concerts</a>
+    <a href="songs.html" class="nav">Songs</a>
+  </div>
+</header>
+
+  <section class="sub-header">
+    <div class="sub-header-image-wrapper">
+      <h1 class="sub-header-title">Stage</h1>
+      <img src="/assets/header_stage.jpg" alt="Header Image" />
+    </div>
+  </section>
+
+  <section class="intro-section">
+    <p class="Welcome">Welcome to Stagerank</p>
+    <div class="intro-text">
+      <p>Rate songs, artists and concerts – and push your favorites to the top of the charts.</p>
+      <p>Our rankings are based on community activity, updated daily and always dynamic.</p>
+      <p>Join in, discover new music, and help shape the charts!</p>
+    </div>
+  </section>
+
+  <section class="top-song-section">
+    <p class="top-song">Top song of the month</p>
+    <iframe
+      class="top-song-iframe"
+      src="https://open.spotify.com/embed/track/3Y1EvIgEVw51XtgNEgpz5c?utm_source=generator&theme=0"
+      frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
+  </section>
+  <script>
+  const hamburger = document.querySelector('.hamburger');
+  const mobileNav = document.querySelector('.mobile-nav');
+
+  hamburger.addEventListener('click', () => {
+    mobileNav.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

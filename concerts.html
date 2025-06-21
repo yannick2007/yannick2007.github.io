@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StageRank – Concerts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+  <img src="/assets/logo.svg" alt="StageRank Logo" class="logo" />
+  
+  <div class="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+  <nav>
+    <a href="index.html" class="nav">Stage</a>
+    <a href="artists.html" class="nav">Artists</a>
+    <a href="concerts.html" class="nav">Concerts</a>
+    <a href="songs.html" class="nav">Songs</a>
+  </nav>
+
+  <div class="mobile-nav">
+    <a href="index.html" class="nav">Stage</a>
+    <a href="artists.html" class="nav">Artists</a>
+    <a href="concerts.html" class="nav">Concerts</a>
+    <a href="songs.html" class="nav">Songs</a>
+  </div>
+</header>
+
+  <section class="sub-header">
+    <div class="sub-header-image-wrapper">
+      <h1 class="sub-header-title">Concerts</h1>
+      <img src="bilder/header 2.webp" alt="Header Image">
+    </div>
+  </section>
+
+  <main style="padding: 20px;">
+    <button id="toggleConcertForm" class="add-song-btn">+ Add Concert</button>
+
+    <form id="concertForm" class="song-form" style="display: none;">
+      <input type="text" id="concertName" placeholder="Concert Name" required>
+      <input type="text" id="concertLocation" placeholder="Location" required>
+      <input type="file" id="concertImage" accept="image/*" required>
+      <button type="submit" class="upload-btn">Upload Concert</button>
+    </form>
+
+    <ul id="concertList" class="artist-list"></ul>
+  </main>
+
+  <script>
+    const concertBaseUrl = 'https://pb07.toiwxr.easypanel.host';
+    const concertCollection = 'concerts';
+
+    const toggleConcertForm = document.getElementById('toggleConcertForm');
+    const concertForm = document.getElementById('concertForm');
+    const concertList = document.getElementById('concertList');
+
+    toggleConcertForm.addEventListener('click', () => {
+      concertForm.style.display = concertForm.style.display === 'none' ? 'block' : 'none';
+    });
+
+    concertForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('concertName').value;
+      const location = document.getElementById('concertLocation').value;
+      const image = document.getElementById('concertImage').files[0];
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('location', location);
+      formData.append('image', image);
+      formData.append('order', Date.now());
+
+      const res = await fetch(`${concertBaseUrl}/api/collections/${concertCollection}/records`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (res.ok) {
+        concertForm.reset();
+        concertForm.style.display = 'none';
+        loadConcerts();
+      } else {
+        console.error('Upload failed:', await res.text());
+      }
+    });
+
+    async function loadConcerts() {
+      concertList.innerHTML = '';
+      const res = await fetch(`${concertBaseUrl}/api/collections/${concertCollection}/records?sort=order`);
+      const data = await res.json();
+      data.items.forEach((concert, index) => {
+        const li = document.createElement('li');
+        li.className = 'artist-line';
+        li.draggable = true;
+        li.dataset.id = concert.id;
+        li.innerHTML = `
+          <span class="artist-rank">${index + 1}.</span>
+          <img class="artist-img" src="${concertBaseUrl}/api/files/${concertCollection}/${concert.id}/${concert.image}" alt="${concert.name}" />
+          <span class="artist-name">${concert.name} – ${concert.location}</span>
+          <button class="delete-btn" onclick="deleteConcert('${concert.id}')">Löschen</button>
+        `;
+        concertList.appendChild(li);
+      });
+      initDragAndDropConcerts();
+    }
+
+    function initDragAndDropConcerts() {
+      let draggingEl;
+
+      concertList.querySelectorAll('li').forEach(el => {
+        el.addEventListener('dragstart', () => {
+          draggingEl = el;
+          el.classList.add('dragging');
+        });
+        el.addEventListener('dragend', () => {
+          el.classList.remove('dragging');
+          updateConcertOrder();
+        });
+        el.addEventListener('dragover', e => {
+          e.preventDefault();
+          const afterEl = getDragAfterElement(concertList, e.clientY);
+          if (afterEl == null) {
+            concertList.appendChild(draggingEl);
+          } else {
+            concertList.insertBefore(draggingEl, afterEl);
+          }
+        });
+      });
+    }
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('li:not(.dragging)')];
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    async function updateConcertOrder() {
+      const ids = [...concertList.children].map((el, index) => ({ id: el.dataset.id, order: index }));
+      for (const { id, order } of ids) {
+        await fetch(`${concertBaseUrl}/api/collections/${concertCollection}/records/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order })
+        });
+      }
+      loadConcerts();
+    }
+
+    async function deleteConcert(id) {
+      if (!confirm('Willst du dieses Konzert wirklich löschen?')) return;
+      const res = await fetch(`${concertBaseUrl}/api/collections/${concertCollection}/records/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        loadConcerts();
+      } else {
+        console.error('Fehler beim Löschen:', await res.text());
+      }
+    }
+
+    loadConcerts();
+  </script>
+
+  <script>
+  const hamburger = document.querySelector('.hamburger');
+  const mobileNav = document.querySelector('.mobile-nav');
+
+  hamburger.addEventListener('click', () => {
+    mobileNav.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

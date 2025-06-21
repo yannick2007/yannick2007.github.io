@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StageRank</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header>
+  <img src="/assets/logo.svg" alt="StageRank Logo" class="logo" />
+  
+  <div class="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+  <nav>
+    <a href="index.html" class="nav">Stage</a>
+    <a href="artists.html" class="nav">Artists</a>
+    <a href="concerts.html" class="nav">Concerts</a>
+    <a href="songs.html" class="nav">Songs</a>
+  </nav>
+
+  <div class="mobile-nav">
+    <a href="index.html" class="nav">Stage</a>
+    <a href="artists.html" class="nav">Artists</a>
+    <a href="concerts.html" class="nav">Concerts</a>
+    <a href="songs.html" class="nav">Songs</a>
+  </div>
+</header>
+
+<section class="sub-header">
+  <div class="sub-header-image-wrapper">
+    <h1 class="sub-header-title">Songs</h1>
+    <img src="bilder/header 1.jpg" alt="Header Image">
+  </div>
+</section>
+
+<main style="padding: 20px;">
+  <button id="toggleForm" class="add-song-btn">+ Add Song</button>
+
+  <form id="songForm" class="song-form" style="display: none; margin-top: 15px;">
+    <input type="text" id="name" placeholder="Song Name" required>
+    <input type="text" id="artist" placeholder="Artist Name" required>
+    <input type="file" id="cover" accept="image/*" required>
+    <button type="submit" class="upload-btn">Upload</button>
+  </form>
+
+  <div id="songsList" style="margin-top: 30px;"></div>
+</main>
+
+<script>
+  const baseUrl = 'https://pb07.toiwxr.easypanel.host';
+  const collection = 'songs';
+
+  const toggleBtn = document.getElementById('toggleForm');
+  const form = document.getElementById('songForm');
+  const songsList = document.getElementById('songsList');
+
+  toggleBtn.addEventListener('click', () => {
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const artist = document.getElementById('artist').value;
+    const cover = document.getElementById('cover').files[0];
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('artist', artist);
+    formData.append('cover', cover);
+
+    const res = await fetch(`${baseUrl}/api/collections/${collection}/records`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (res.ok) {
+      form.reset();
+      form.style.display = 'none';
+      loadSongs();
+    } else {
+      console.error('Fehler beim Hochladen:', await res.text());
+    }
+  });
+
+  async function deleteSong(id) {
+    if (!confirm('Willst du diesen Song wirklich löschen?')) return;
+    const res = await fetch(`${baseUrl}/api/collections/${collection}/records/${id}`, {
+      method: 'DELETE'
+    });
+    if (res.ok) {
+      loadSongs();
+    } else {
+      console.error('Fehler beim Löschen:', await res.text());
+    }
+  }
+
+  async function loadSongs() {
+    songsList.innerHTML = '';
+    const res = await fetch(`${baseUrl}/api/collections/${collection}/records`);
+    const data = await res.json();
+
+    data.items.forEach(song => {
+      const div = document.createElement('div');
+      div.className = 'song-card';
+      const imgUrl = `${baseUrl}/api/files/${collection}/${song.id}/${song.cover}`;
+      div.innerHTML = `
+        <img src="${imgUrl}" alt="Cover">
+        <div class="song-info">
+          <h3>${song.name}</h3>
+          <p>${song.artist}</p>
+        </div>
+        <button class="delete-btn" onclick="deleteSong('${song.id}')">Löschen</button>
+      `;
+      songsList.appendChild(div);
+    });
+  }
+
+  loadSongs();
+</script>
+<script>
+  const hamburger = document.querySelector('.hamburger');
+  const mobileNav = document.querySelector('.mobile-nav');
+
+  hamburger.addEventListener('click', () => {
+    mobileNav.classList.toggle('active');
+  });
+</script>
+
+</body>
+</html>

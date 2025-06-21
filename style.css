@@ -1,0 +1,446 @@
+@import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rammetto+One&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: black;
+  color: white;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 200px;
+}
+
+header {
+  background-color: #ffb3c6;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  font-size: 30px;
+}
+
+.logo {
+  height: 100px;
+  width: auto;
+}
+
+nav {
+  display: flex;
+  gap: 40px;
+}
+
+nav a {
+  text-decoration: none;
+  color: black;
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: #fb6f92;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span {
+  height: 3px;
+  width: 25px;
+  background: black;
+  margin: 4px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background-color: #ffb3c6;
+  position: absolute;
+  top: 100px;
+  right: 0;
+  width: 100%;
+  padding: 20px;
+  gap: 20px;
+}
+
+.mobile-nav a {
+  color: black;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.sub-header {
+  margin-top: 160px;
+  text-align: center;
+  background-color: #1a1a1a;
+}
+
+.sub-header-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+}
+
+.sub-header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.sub-header-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  padding: 0 20px;
+  text-align: center;
+}
+
+.intro-section {
+  padding: 60px 80px 30px;
+  text-align: left;
+}
+
+.intro-section .Welcome {
+  font-size: 50px;
+  color: #ffb3c6;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.intro-section .intro-text {
+  font-size: 20px;
+  color: #d5d5d5;
+  line-height: 1.7;
+  max-width: 900px;
+}
+
+.top-song-section {
+  padding: 20px 80px;
+  text-align: left;
+}
+
+.top-song-section .top-song {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.top-song-iframe {
+  width: 100%;
+  max-width: 600px;
+  height: 152px;
+  border-radius: 12px;
+}
+
+.song-card {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  width: 220px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.song-card:hover {
+  transform: scale(1.03);
+}
+
+.song-card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.song-info h3 {
+  font-size: 20px;
+  margin: 8px 0 4px;
+}
+
+.song-info p {
+  font-size: 16px;
+  color: #ffb3c6;
+  margin-bottom: 10px;
+}
+
+.delete-btn,
+.artist-line .delete-btn {
+  background-color: #fb6f92;
+  border: none;
+  color: black;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.delete-btn:hover,
+.artist-line .delete-btn:hover {
+  background-color: #ffb3c6;
+}
+
+.add-song-btn {
+  background-color: #fb6f92;
+  color: black;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.add-song-btn:hover {
+  background-color: #ffb3c6;
+}
+
+.song-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.song-form input[type='text'],
+.song-form input[type='file'] {
+  padding: 10px;
+  background-color: #2b2b2b;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.song-form input::placeholder {
+  color: #bbb;
+}
+
+.upload-btn {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.upload-btn:hover {
+  background-color: #3399ff;
+}
+
+.artist-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.artist-line {
+  display: flex;
+  align-items: center;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  gap: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.artist-line:hover {
+  background-color: #2a2a2a;
+}
+
+.artist-line.dragging {
+  opacity: 0.5;
+}
+
+.artist-rank {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fb6f92;
+  width: 30px;
+  text-align: right;
+}
+
+.artist-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fb6f92;
+}
+
+.artist-name {
+  font-size: 20px;
+  flex-grow: 1;
+}
+
+@media screen and (max-width: 768px) {
+  nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobile-nav {
+    display: flex;
+  }
+}
+
+
+/* HAMBURGER-ICON */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 30px;
+  height: 3px;
+  background-color: black;
+  border-radius: 2px;
+}
+
+/* MOBILE NAVIGATION AUSGEBLENDET */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background-color: #ffb3c6;
+  position: absolute;
+  top: 100px;
+  right: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1001;
+}
+
+.mobile-nav a {
+  color: black;
+  padding: 10px 0;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.mobile-nav a:hover {
+  color: #fb6f92;
+}
+
+/* SICHTBAR WENN "active" */
+.mobile-nav.active {
+  display: flex;
+}
+
+/* MOBILE STYLES */
+@media screen and (max-width: 768px) {
+  nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .logo {
+    height: 80px;
+  }
+}
+
+/* Hamburger-Menü Button */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 30px;
+  height: 3px;
+  background-color: black;
+  border-radius: 2px;
+}
+
+/* Mobile Navigation (ausgeklappt) */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background-color: #ffb3c6;
+  position: absolute;
+  top: 100px;
+  right: 0;
+  left: 0;
+  padding: 20px 30px;
+  z-index: 1001;
+  border-top: 1px solid #e68da9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-nav a {
+  color: black;
+  padding: 12px 0;
+  text-decoration: none;
+  font-size: 22px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.mobile-nav a:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav a:hover {
+  color: #fb6f92;
+}
+
+/* Sichtbar wenn aktiv */
+.mobile-nav.active {
+  display: flex;
+}
+
+/* Responsive: Desktop vs Mobile */
+@media screen and (max-width: 768px) {
+  nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .logo {
+    height: 80px;
+  }
+}
